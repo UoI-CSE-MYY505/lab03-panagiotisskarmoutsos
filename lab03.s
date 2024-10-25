@@ -93,6 +93,7 @@ outShowColumnLoop:
     addi t0, t0, 1
     j    showRowLoop
 outShowRowLoop:
+    
     jalr zero, ra, 0
 
 # ----------------------------------------
@@ -101,6 +102,50 @@ rgb888_to_rgb565:
 # ----------------------------------------
 # Write your code here.
 # You may move the "return" instruction (jalr zero, ra, 0).
+add a4, a3, zero ## a4 address shifts away from a3 to fill in the bits
+add a5, a2, zero ## a5 is the for cout for every collumn(a2)
+nextrow:
+    bne a1, zero, endarray
+    add a5, a2, zero
+nextcollumn:
+    bne a5, zero, then ##goes to next row
+    addi a1, a1, -1
+    j nextrow
+then:
+    addi t1, zero, 5
+redrepeat:
+    beq t1, zero, redend
+    lb t0, 0(a0)
+    sb t0, 0(a4)
+    addi a0, a0, 1
+    addi a4, a4, 1
+    j redrepeat
+redend: 
+    addi a0, a0, 4
+    addi t1, zero, 6
+greenrepeat:
+    beq t1, zero, greenend
+    lb t0, 0(a0)
+    sb t0, 0(a4)
+    addi a0, a0, 1
+    addi a4, a4, 1
+    j greenrepeat
+greenend: 
+    addi a0, a0, 3
+    addi t1, zero, 5
+bluerepeat:
+    beq t1, zero, blueend
+    lb t0, 0(a0)
+    sb t0, 0(a4)
+    addi a0, a0, 1
+    addi a4, a4, 1
+    j bluerepeat
+blueend: 
+    addi a0, a0, 3
+    addi t1, zero, 3
+    addi a5, a5, -1 ##-1pixel
+    j nextcollumn #because the next pixel is in the next collumn
+endarray:
     jalr zero, ra, 0
 
 
